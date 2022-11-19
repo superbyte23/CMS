@@ -65,8 +65,8 @@
                 <?php endforeach ?>
               </select>
             </div>
-          <button type="submit" class="btn btn-success"><i class="fa fa-save me-2"></i>Save</button>
-          <a href="<?php echo URLROOT ?>/app/controller/program_controller.php?action=destroy&program_id=<?php echo $program_info->program_id ?>" class="btn btn-danger" onclick="if (confirm('You are about to delete a record.')) {}else{event.preventDefault()}"><i class="fa fa-trash me-2"></i> Delete</a>
+          <button type="submit" class="btn btn-success"><i class="feather-save me-1"></i>Save</button>
+          <a href="<?php echo URLROOT ?>/app/controller/program_controller.php?action=destroy&program_id=<?php echo $program_info->program_id ?>" class="btn btn-danger" onclick="if (confirm('You are about to delete a record.')) {}else{event.preventDefault()}"><i class="feather-trash-2 me-1"></i> Delete</a>
         </form>
       </div>
     </div>

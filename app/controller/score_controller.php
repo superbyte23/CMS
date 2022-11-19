@@ -4,6 +4,7 @@ $user = new User($db);
 $criteria = new Criteria($db);
 $score = new Score($db);
 $part = new Participant($db);
+$judge = new Judge($db);
 $action = (isset($_GET['action']) && $_GET['action'] != '') ? $_GET['action'] : '';
 switch ($action) {
 	case 'add': 	
@@ -22,21 +23,74 @@ switch ($action) {
 		load_form($score, $criterias, $_POST['judge_id'], $participants, $_POST['program_id']);
 		break;
 
-	case 'submit_score':  
+	case 'get_overallscore_by_judge': 
+		$sql = "SELECT
+		participants.participant_id,
+		participants.participant_name,
+		scores.judge_id, ";
+		$filter = "";
+		$sqltotal = "";
+		foreach ($criteria->criteria_in_program_id($_POST['program_id']) as $key => $crit) {
+			$filter .= "SUM(CASE WHEN scores.`criteria_id` = ".$crit->criteria_id." THEN scores.`score` ELSE 0 END ) as '".$crit->criteria."', ";
+			$sqltotal .= "SUM(CASE WHEN scores.`criteria_id` = ".$crit->criteria_id." THEN scores.`score` ELSE 0 END) + ";
+		}
+		$sql .= $filter;
+		$sql .= "(".rtrim($sqltotal, '+ ').") AS TOTAL, ";
+		$sql .= "RANK() OVER (ORDER BY (".rtrim($sqltotal, "+ ").") DESC) AS RANK FROM scores LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE judge_id = ".$_POST['judgeid']." GROUP BY scores.`judge_id`, scores.`participant_id` ORDER BY participant_id;";  
+		$db->setQuery($sql);
+		$results = $db->results_obj(); 
+		?>
+		<h1 class="mb-4">Name : <?php echo $judge->judge_info($_POST['judgeid'], $_POST['program_id'])->fullname ?></h1>
+		<div class="table-responsive">
+			<table class="table table-striped table-bordered table-hover "> 
+			  <thead class="thead-dark|thead-light">
+			    <tr>
+			      <th scope="col">#</th>
+			      <th scope="col">Participants</th>
+			     	<?php foreach ($criteria->criteria_in_program_id($_POST['program_id']) as $key => $crit): ?>
+			     		<th><?php echo $crit->criteria ?></th>
+			     	<?php endforeach ?>
+			     	<th>TOTAL SCORE</th>
+			      <th scope="col">RANK</th>
+			    </tr>
+			  </thead>
+			  <tbody>
+			  	<?php foreach ($results as $key => $result): ?>
+			  		<tr>
+			      <th scope="row"><?php echo $key+1 ?></th>
+			      <td><?php echo $result->participant_name ?></td>
+			     	<?php foreach($criteria->criteria_in_program_id($_POST['program_id']) as $key => $crit): ?>
+			     		<?php $prop = $crit->criteria; ?>
+			     		<td><?php echo $result->$prop; ?></td>
+			     	<?php endforeach ?>
+			     	<td><?php echo $result->TOTAL ?></td>
+			      <td><?php echo $result->RANK; ?></td>
+			    </tr> 
+			  	<?php endforeach ?>
+			    
+			  </tbody>
+			</table>
+		</div>
+		<?php 
+		break;
+
+	case 'submit_score':   
 		$score->criteria_id = $_POST['criteria_id'];
 		$score->score = $_POST['score'];
 		$score->participant_id = $_POST['participant_id'];
 		$score->program_id = $_POST['program_id'];
 		$score->judge_id = $_POST['judge_id']; 
 
-		if (isset($_POST['score_id']) > 0) {
+		if (isset($_POST['score_id']) > 0) { 
 			$score->date_time_updated = date('Y-m-d H:i:s');
 			$score->update($_POST['score_id']);
-			$msg = array('msg_type' => 'success', 'msg' => 'Score updated Successfully');
+			$msg = array('msg_type' => 'success_update', 'msg' => 'Score updated Successfully');
 			// $_SESSION['msg_success'] = "Score updated Successfully";
 		}else{
+			// insert if no score_id to update
 			$score->save();
-			$msg = array('msg_type' => 'success', 'msg' => 'Score Submitted Successfully');
+			$msg = array('msg_type' => 'success_added', 'msg' => 'Score Submitted Successfully');
+			
 			// $_SESSION['msg_success'] = "Score Submitted Successfully";
 		}  
 		echo json_encode($msg); 

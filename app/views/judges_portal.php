@@ -35,7 +35,7 @@
   <div class="container-fluid">
      <div class="row row-cards">
       <?php foreach ($programs_to_judges as $prog): ?>
-        <div class="col-xl-3 col-lg-4 col-md-6">
+        <div class="col-xl-4 col-md-6">
           <div class="card p-3">
             <div class="d-flex justify-content-start align-items-center">
               <div class="col-auto">

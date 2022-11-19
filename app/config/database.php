@@ -7,6 +7,7 @@ class DB
 	protected $db= DB_NAME;
 	protected $pass= DB_PASS;
  	protected $query = "";
+ 	protected $sql_string = "";
 	protected $conn;
 	public $last_query;
 	private $magic_quotes_active;
@@ -18,6 +19,7 @@ class DB
 	 	try {
 	 		$this->conn = new PDO("mysql:host=".$this->host.";dbname=".$this->db,$this->user,$this->pass, array(PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8")); 
 	 	 	$this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	 	 	$this->conn->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
 	 	} catch (PDOException $e) {
 	 		return $e->getMessage();
 	 	}

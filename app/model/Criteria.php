@@ -125,7 +125,7 @@ class Criteria extends DB{
 		}
 		$sql = "UPDATE ".self::$tbl_name." SET ";
 		$sql .= join(", ", $attribute_pairs);
-		$sql .= " WHERE id =". $id;
+		$sql .= " WHERE criteria_id =". $id;
 		return  $this->InsertThis($sql);
 	 	
 	}
@@ -133,7 +133,7 @@ class Criteria extends DB{
 	public function delete($id=0) {
 		
 		  $sql = "DELETE FROM ".self::$tbl_name;
-		  $sql .= " WHERE id =". $id;
+		  $sql .= " WHERE criteria_id =". $id;
 		  $sql .= " LIMIT 1 ";
 		return  $this->InsertThis($sql);
 		  

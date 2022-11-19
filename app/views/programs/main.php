@@ -31,7 +31,7 @@
   <div class="container-fluid">
     <div class="row row-cards">
       <?php foreach ($allPrograms as $key => $program): ?>
-      <div class="col-md-6 col-xl-2">
+      <div class="col-md-6 col-xl-3">
         <div class="card shadow">
           <?php if ($program->status == 'active'): ?>
             <div class="card-status-top bg-green"></div>

@@ -39,10 +39,11 @@ switch ($view) {
       }
       $filter = implode(", ",$x);
     }   
-    
+    $total_percent = 0;
     // all users data as judges filtered not exist in the judge table
     $judges = $user->find_users_not_in_judges('judge', $filter); 
     $content = "program_info.php";
+
     break;
   case 'edit':
     $program_info = $program->edit($_GET['program_id']);

@@ -39,6 +39,8 @@
           <tr>
             <th>#</th>
             <th>Name</th>
+            <th>Username</th>
+            <th>Password</th>
             <th>Usertype</th>
             <th>Email</th>
             <th class="w-1">Handle</th>
@@ -50,6 +52,8 @@
             <tr>
               <th><?php echo $key+1; ?></th>
               <td><?php echo $user->fullname ?></td>
+              <td><?php echo $user->username ?></td>
+              <td><?php echo $user->password ?></td>
               <td><?php echo $user->usertype ?></td>
               <td><?php echo $user->email ?></td>
               <td>

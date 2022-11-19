@@ -71,8 +71,8 @@ if (!isset($_SESSION['userid'])){
 } 
 include APPROOT.'/layout/template.php';
 ?>
-<script src="<?php echo URLROOT ?>/public/plugins/chart.js/Chart.min.js"></script>
-<script src="<?php echo URLROOT ?>/public/dist/js/pages/dashboard3.js"></script>
+<!-- <script src="<?php echo URLROOT ?>/public/plugins/chart.js/Chart.min.js"></script> -->
+<!-- <script src="<?php echo URLROOT ?>/public/dist/js/pages/dashboard3.js"></script> -->
 <script type="text/javascript">
 	$(document).ready(function() {
 		$('.link-layout-list').on('click', function(){

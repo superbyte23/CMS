@@ -22,7 +22,7 @@ class Judge extends DB{
 	}
 
 	public function judge_info($id, $program_id){
-		$sql = "SELECT * FROM `judges` LEFT JOIN users ON judges.user_id = users.id WHERE user_id = :id AND program_id = :program_id";
+		$sql = "SELECT * FROM `judges` LEFT JOIN users ON judges.user_id = users.id WHERE (user_id = :id OR judge_id = :id) AND program_id = :program_id";
 		$stmt = $this->conn->prepare($sql);
 		$stmt->bindValue(':id', $id);
 		$stmt->bindValue(':program_id', $program_id);
@@ -153,7 +153,7 @@ class Judge extends DB{
 	public function delete($id=0) {
 		
 		  $sql = "DELETE FROM ".self::$tbl_name;
-		  $sql .= " WHERE id =". $id;
+		  $sql .= " WHERE judge_id =". $id;
 		  $sql .= " LIMIT 1 ";
 		return  $this->InsertThis($sql);
 		  

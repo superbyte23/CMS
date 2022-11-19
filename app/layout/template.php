@@ -12,31 +12,35 @@
     <link href="<?php echo URLROOT; ?>/public/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
     <link href="<?php echo URLROOT; ?>/public/dist/css/demo.min.css" rel="stylesheet">
     <link href="<?php echo URLROOT; ?>/public/dist/css/font.css" rel="stylesheet">
-    <style type="text/css">
-      body{
+    <style type="text/css"> 
+      *{
         font-family: "Poppins-Regular"!important;
       }
       .table thead th {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
         vertical-align: middle;
         text-align: center;
       }
       .table tbody td {
-        font-size: 1.4rem;
+        font-size: 1.2rem;
         vertical-align: middle;
         text-align: center;
       }
     </style> 
     <!-- fontawesome -->
-    <link href="<?php echo URLROOT; ?>/public/dist/libs/fontawesome/css/all.css" rel="stylesheet"/>
+    <link href="<?php echo URLROOT; ?>/public/dist/libs/feather-icons-web/feather.css" rel="stylesheet"/>
     <!-- jquery --> 
     <script src="<?php echo URLROOT; ?>/public/dist/libs/jquery/js/jquery-3.6.1.min.js"></script>
     <!-- confirm js -->
     <link href="<?php echo URLROOT; ?>/public/dist/libs/confirm/css/jquery-confirm.min.css" rel="stylesheet">
     <script src="<?php echo URLROOT; ?>/public/dist/libs/confirm/js/jquery-confirm.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php echo URLROOT; ?>/public/dist/css/loader.css">
   </head>
-  <body >
-    <div class="page">
+  <body > 
+    <div class="page position-relative">
+      <div class="drawing position-fixed d-none" style="z-index: 1;" id="loading">
+        <div class="loading-dot"></div>
+      </div>
       <?php require_once APPROOT.'/layout/header-condensed.php'; ?>
       <?php // require_once APPROOT.'/layout/admin-sidebar.php'; ?>  
       <?php // require_once APPROOT.'/layout/header.php'; ?>
@@ -74,9 +78,9 @@
     </div>
     
     <!-- Libs JS -->
-    <script src="<?php echo URLROOT; ?>/public/dist/libs/apexcharts/dist/apexcharts.min.js"></script>
-    <script src="<?php echo URLROOT; ?>/public/dist/libs/jsvectormap/dist/js/jsvectormap.min.js"></script>
-    <script src="<?php echo URLROOT; ?>/public/dist/libs/jsvectormap/dist/maps/world.js"></script>
+    <!-- <script src="<?php echo URLROOT; ?>/public/dist/libs/apexcharts/dist/apexcharts.min.js"></script> -->
+    <!-- <script src="<?php echo URLROOT; ?>/public/dist/libs/jsvectormap/dist/js/jsvectormap.min.js"></script> -->
+    <!-- <script src="<?php echo URLROOT; ?>/public/dist/libs/jsvectormap/dist/maps/world.js"></script> -->
     <!-- Tabler Core -->
     <script src="<?php echo URLROOT; ?>/public/dist/js/tabler.min.js"></script>
     <script src="<?php echo URLROOT; ?>/public/dist/js/demo.min.js"></script>
@@ -88,10 +92,10 @@
     
       function showMessage(msgtheme='green', msgtype='Success!', msg='Demo'){
         $.confirm({
-            icon: 'fa-regular fa-thumbs-up',
+            icon: 'feather-alert-triangle',
             theme: 'modern',
             closeIcon: true,
-            closeIconClass: 'fa fa-close',
+            closeIconClass: 'feather-x',
             animation: 'scale',
             closeAnimation: 'zoom',
             animationSpeed: 200, // 0.2 seconds

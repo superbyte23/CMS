@@ -45,13 +45,15 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <div class="p-4 p-md-5 mb-4 text-white rounded bg-dark">
-          <div class="col-xl-8 col-md-12 px-0">
-            <h1 class="display-4 fst-italic">Kabankalan Catholic College</h1>
-            <h1 class="display-4 fst-italic"><span class="fw-bold">Contest Management System</span></h1>
-            <p class="lead my-3">E-Judging, Events, Programs, User Management, Judges Registration and many more..s</p>
-            <p class="lead mb-0"><a href="#" class="text-white fw-bold">Continue reading...</a></p>
-          </div>
+        <div class="p-4 p-md-5 mb-4 text-white  text-center rounded bg-dark"> 
+          <img src="<?php echo ASSETS ?>/static/kcclogo.png" width="250" class="img-fluid">
+          <h1 class="display-4 d-none d-lg-block fst-italic">Kabankalan Catholic College</h1>
+          <h1 class="display-4 d-none d-lg-block fst-italic"><span class="fw-bold">Contest Management System</span></h1>
+
+          <h1 class="fst-italic d-lg-none">Kabankalan Catholic College</h1>
+          <h1 class="fst-italic d-lg-none"><span class="fw-bold">Contest Management System</span></h1>
+
+          <p class="lead my-3">E-Judging, Events, Programs, User Management, Judges Registration and many more.</p>  
         </div>
       </div> 
     </div>
