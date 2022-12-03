@@ -43,13 +43,15 @@ switch ($action) {
 		foreach ($judgeList as $key => $jd) {
 			foreach ($critList as $key => $crit) { 
 				foreach ($partcpntList as $key => $part) { 
-					$sql .= "INSERT INTO `scores`(`program_id`, `judge_id`, `criteria_id`, `participant_id`, `score`) VALUES (".$_POST['program_id'].", ".$jd->judge_id.", ".$crit->criteria_id.", ".$part->participant_id.", '');";
+					$sql .= $counter++." INSERT INTO `scores`(`program_id`, `judge_id`, `criteria_id`, `participant_id`, `score`) VALUES (".$_POST['program_id'].", ".$jd->judge_id.", ".$crit->criteria_id.", ".$part->participant_id.", '');<br>";
 				}
 			} 
 		}
-		echo $sql;
-
-		// echo $db->InsertThis($sql); 
+		 
+	 	echo $sql;
+	 	die();
+		echo $db->InsertThis($sql);
+		header('location: '.URLROOT.'/app/views/programs/?view=program_info&program_id='.$_POST['program_id']);
 		break;
 
 

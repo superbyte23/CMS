@@ -15,29 +15,8 @@
         </div>
         <h2 class="page-title">
         <?php echo $pagetitle ?>
-        </h2>
-
-
-      </div>
-      <!-- Page title actions -->
-      <!-- <div class="col-auto ms-auto d-print-none">
-        <div class="btn-list">
-          <span class="d-none d-sm-inline">
-            <a href="#" class="btn btn-white">
-              New view
-            </a>
-          </span>
-          <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-dynamic">
-            
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-            Create new report
-          </a>
-          <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
-             
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
-          </a>
-        </div>
-      </div> -->
+        </h2> 
+      </div> 
     </div>
   </div>
 </div>
@@ -45,15 +24,16 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-12">
-        <div class="p-4 p-md-5 mb-4 text-white  text-center rounded bg-dark"> 
-          <img src="<?php echo ASSETS ?>/static/kcclogo.png" width="250" class="img-fluid">
-          <h1 class="display-4 d-none d-lg-block fst-italic">Kabankalan Catholic College</h1>
-          <h1 class="display-4 d-none d-lg-block fst-italic"><span class="fw-bold">Contest Management System</span></h1>
-
+        <div class="p-4 p-md-5 mb-4 text-white text-center rounded bg-dark" id="dashboard"> 
+          <img src="<?php echo ASSETS ?>/static/kcclogo.png" width="250" class="img-fluid" />
+          <h1 class="display-4 d-none d-md-block ">Kabankalan Catholic College</h1>
+          <h1 class="display-5 d-none d-md-block fw-bold">
+             Contest Management System 
+          </h1> 
           <h1 class="fst-italic d-lg-none">Kabankalan Catholic College</h1>
-          <h1 class="fst-italic d-lg-none"><span class="fw-bold">Contest Management System</span></h1>
+          <h2 class="fst-italic d-lg-none">Contest Management System</h2>
 
-          <p class="lead my-3">E-Judging, Events, Programs, User Management, Judges Registration and many more.</p>  
+          <p class="markdown my-3">E-Judging and Event Management</p>  
         </div>
       </div> 
     </div>

@@ -60,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-7">
         <div class="card shadow mb-3">
           <div class="card-header">
             <h3 class="card-title">Criteria for Judging</h3>
@@ -73,6 +73,7 @@
                     <th class="text-start">Citeria</th>
                     <th class="text-start">Description</th>
                     <th>Percentage%</th>
+                    <th>Status</th>
                     <th class="w-1"></th>
                   </tr>
                 </thead>
@@ -83,6 +84,7 @@
                     <td class="fw-bold text-start"><?php echo $criteria->criteria ?></td>
                     <td class="text-start"><?php echo $criteria->description ?></td>
                     <td><?php echo $criteria->percentage ?>%</td>
+                    <td><?php echo ($criteria->status == 0) ? '' : '<svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="5" y="11" width="14" height="10" rx="2"></rect><circle cx="12" cy="16" r="1"></circle><path d="M8 11v-4a4 4 0 0 1 8 0v4"></path></svg>' ?></td>
                     <td>
                       <div class="d-flex gap-1">
                         <a class="btn btn-sm edit_criteria" href="#" data-criteriaid="<?php echo $criteria->criteria_id ?>" data-bs-toggle="modal" data-bs-target="#modal-edit-criteria">
@@ -129,7 +131,7 @@
           </div> 
         </div>
       </div>
-      <div class="col-6">
+      <div class="col-5">
         <div class="card shadow">
           <div class="card-header">
             <h3 class="card-title">Participants</h3>
@@ -152,9 +154,9 @@
                 <div class="col text-truncate">
                   <a href="#" class="text-reset d-block"><?php echo $participant->participant_name ?></a>
                 </div>
-                <div class="col text-truncate">
+                <!-- <div class="col text-truncate">
                   <a href="#" class="text-reset d-block"><?php echo $participant->department_name ?></a>
-                </div>
+                </div> -->
                 <div class="col-auto">
                   <a href="#" data-bs-toggle="modal" data-participantid="<?php echo $participant->participant_id ?>" data-bs-target="#modal-edit" class="participant_edit btn btn-sm"><!-- Download SVG icon from http://tabler-icons.io/i/star -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path><line x1="13.5" y1="6.5" x2="17.5" y2="10.5"></line></svg>
@@ -260,12 +262,19 @@
             <input type="text" class="form-control" name="criteria" placeholder="Criteria">
           </div>
           <div class="mb-3">
-            <label class="form-label">Name <span class="text-danger">*</span></label>
+            <label class="form-label">Description <span class="text-danger">*</span></label>
             <input type="text" class="form-control" name="description" placeholder="Description">
-          </div>
+          </div> 
           <div class="mb-3">
             <label class="form-label">Percentage <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="percentage" placeholder="%">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status </label>
+            <label class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" name="status" value="locked">
+              <span class="form-check-label">Locked</span>
+            </label>
           </div>
         </div>
         <div class="modal-footer">
@@ -300,6 +309,13 @@
           <div class="mb-3">
             <label class="form-label">Percentage <span class="text-danger">*</span></label>
             <input type="number" class="form-control" name="percentage" id="percentage" placeholder="%">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Status </label>
+            <label class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="crit_stats" name="status" value="locked">
+              <span class="form-check-label">Locked</span>
+            </label>
           </div>
         </div>
         <div class="modal-footer">
@@ -393,7 +409,12 @@
         $('#criteria_id').val(rp.criteria_id);
         $('#criteria').val(rp.criteria);
         $('#description').val(rp.description);
-        $('#percentage').val(rp.percentage);  
+        $('#percentage').val(rp.percentage); 
+        if (parseInt(rp.status) > 0) {
+          $('#crit_stats').attr('checked', true); 
+        }else{
+          $('#crit_stats').attr('checked', false); 
+        }
         console.log(rp);
         console.log("success");
       })

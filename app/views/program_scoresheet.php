@@ -9,7 +9,29 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
 
 // load_form($score, $criterias, $_POST['judge_id'], $participants, $_POST['program_id']);
 
-?>
+// for ranking only
+$rank_list = array();
+$rank_list_raw = array();
+$final_rank = array();
+foreach ($participants as $key => $part){
+  $rank_list[$part->participant_id] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
+  $rank_list_raw[] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score; 
+
+  $sql = "SELECT participants.participant_id, participants.participant_name, judges.judge_id, users.fullname, SUM(`score`) AS OVERALL_SCORE_BY_JUDGE, RANK() OVER(PARTITION BY judges.judge_id ORDER BY SUM(`score`) DESC ) AS RANK_BY_JUDGES FROM `scores` LEFT JOIN judges ON scores.judge_id = judges.judge_id LEFT JOIN users ON judges.user_id = users.id LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE scores.program_id = ".$_GET['program']." AND judges.judge_id = ".$judge_info->judge_id." GROUP BY scores.`participant_id`, scores.`judge_id` ORDER BY judges.judge_id, scores.participant_id;";
+
+  $db->setQuery($sql);
+  $ranks = $db->results_obj();  
+}  
+  
+?> 
+<?php $rank_average = rankify_asc($rank_list_raw, count($rank_list_raw));  ?> 
+<?php 
+$counter = 0;
+foreach ($rank_list as $index => $val) { 
+  $final_rank[$index] = $rank_average[$counter]; 
+  $counter = $counter + 1;
+}
+?>  
 <div class="container-fluid">
   <!-- Page title -->
   <div class=" card card-body page-header d-print-none card">
@@ -51,7 +73,7 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
   }
 </style>
 <div class="page-body">
-  <div class="container-fluid">
+  <div class="container-fluid">  
     <div class="card">
       <div class="card-header">
         <h1 class="mb-0">Score Sheet : <?php echo $judge_info->fullname ?></h1>
@@ -62,17 +84,20 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
 </svg> Update Ranking</a> 
       </div>
       <div class="table-responsive">
-        <table class="table table-bordered table-lg" id="scoresheet"> 
+        <table class="table table-bordered border-dark table-hover  table-lg" id="scoresheet"> 
           <thead class="table-dark">
             <tr>
               <th>#</th>
-              <th  class="text-start col-2">Candidates</th>
+              <th  class="text-start col-4">Candidates</th>
               <?php $total_percent=0; $total_score=0; ?>
               <?php foreach ($criterias as $key => $criteria): ?>
               <?php $total_percent += $criteria->percentage; // SUM total percentage ?> 
               <th>
-                <div><?= $criteria->criteria ?> : <?= $criteria->percentage ?>%</div>
+                <div class="d-flex align-items-center justify-content-center"><?php if ($criteria->status == 1): ?>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="5" y="11" width="14" height="10" rx="2"></rect><circle cx="12" cy="16" r="1"></circle><path d="M8 11v-4a4 4 0 0 1 8 0v4"></path></svg> 
+                <?php endif ?><?= $criteria->criteria ?> : <?= $criteria->percentage ?>%</div>
                 <small class="text-red"><?= $criteria->description ?></small>
+                
               </th>
               <?php endforeach ?>
               <th class="col-1"><?php echo $total_percent ?>%</th>
@@ -82,11 +107,15 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
           <tbody> 
 <?php foreach ($participants as $key => $part): ?>
 <tr>
-  <td><?= $key+1 ?></td>
+  <td><?= $part->participant_id ?></td>
   <td class="text-start"><?= $part->participant_name ?></td>
   <?php foreach ($criterias as $key => $crit): // display inputs for each criteria ?>
   <td
+  <?php if ($crit->status == 1): ?>
+  contenteditable="false"
+  <?php else: ?>
   contenteditable="true" 
+  <?php endif ?>
   class="input-field"  
   data-percentage="<?php echo $crit->percentage ?>"
   data-criteriaid="<?php echo $crit->criteria_id ?>" 
@@ -96,21 +125,26 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
   <?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score)) ? 
   "data-scoreid='".$score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score_id."'" : ""; ?>><?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score) > 0) ? $score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score : "" ?></td> 
   <?php endforeach ?>
-  <td class="bg-indigo-lt total_score"> 
-    <?php echo $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score; ?></td>
+  <td class="bg-indigo-lt total_score">
+    <?php
+    $rank_list[$part->participant_id] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
+    $rank_list_raw[] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
+    echo $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
+    ?>
+  </td>
   <?php
-  $sql = "SELECT participants.participant_id, participants.participant_name, judges.judge_id, users.fullname, SUM(`score`) AS OVERALL_SCORE_BY_JUDGE, RANK() OVER( PARTITION BY judges.judge_id ORDER BY SUM(`score`) DESC ) AS RANK_BY_JUDGES FROM `scores` LEFT JOIN judges ON scores.judge_id = judges.judge_id LEFT JOIN users ON judges.user_id = users.id LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE scores.program_id = ".$_GET['program']." AND judges.judge_id = ".$judge_info->judge_id." GROUP BY scores.`participant_id`, scores.`judge_id` ORDER BY judges.judge_id, scores.participant_id;";
-
+  $sql = "SELECT participants.participant_id, participants.participant_name, judges.judge_id, users.fullname, SUM(`score`) AS OVERALL_SCORE_BY_JUDGE, RANK() OVER(PARTITION BY judges.judge_id ORDER BY SUM(`score`) DESC ) AS RANK_BY_JUDGES FROM `scores` LEFT JOIN judges ON scores.judge_id = judges.judge_id LEFT JOIN users ON judges.user_id = users.id LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE scores.program_id = ".$_GET['program']." AND judges.judge_id = ".$judge_info->judge_id." GROUP BY scores.`participant_id`, scores.`judge_id` ORDER BY judges.judge_id, scores.participant_id;";
+  //echo $sql;
   $db->setQuery($sql);
   $ranks = $db->results_obj();
-  foreach ($ranks as $key => $rank) {
-    if ($rank->participant_id == $part->participant_id) {
-     echo "<td class='bg-green-lt'>".$rank->RANK_BY_JUDGES."</td>";
+  foreach ($final_rank as $key => $rank) {
+    if ($key == $part->participant_id) {
+     echo "<td class='bg-green-lt'>".$rank."</td>";
     }
   }
   ?>
 </tr>
-<?php endforeach ?>  
+<?php endforeach ?> 
              
           </tbody>
         </table>
@@ -123,7 +157,7 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
     var current_score = 0;
     $('.input-field').on("keydown", function (e) { 
       var code = e.keyCode || e.which;
-      if (code === 8 || code === 46 || code === 37 || code === 38  || code === 40  || code === 39 || code === 96 || code === 97 || code === 98 || code === 99 || code === 100 || code === 101 || code === 102 || code === 103 || code === 104 || code === 105) {
+      if (code === 8 || code === 46 || code === 37 || code === 38  || code === 40  || code === 39 || code === 96 || code === 97 || code === 98 || code === 99 || code === 100 || code === 101 || code === 102 || code === 103 || code === 104 || code === 105 || code === 190) {
         // 37 arrow left
         // 38 arrow up
         // 39 arrow right
@@ -148,11 +182,11 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
         // console.log(current_score);
         // console.log(x);
         if (current_score != x) {
-          if (parseInt(current_score) != parseInt(x)) {
+          if (parseFloat(current_score) != parseFloat(x)) {
             if (validate_score($(this)) == true) {
               console.log('score validated');
               send_score($(this));
-              current_score = parseInt(x);
+              current_score = parseFloat(x);
 
             }
           } 
@@ -180,11 +214,11 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
         $(this).html("");
       }
       if (current_score != x) {
-        if (parseInt(current_score) != parseInt(x)) {
+        if (parseFloat(current_score) != parseFloat(x)) {
           if (validate_score($(this)) == true) {
             console.log('score validated');
             send_score($(this));
-            current_score = parseInt(x);
+            current_score = parseFloat(x);
           }
         } 
       }else{
@@ -200,7 +234,7 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
         if (val.innerText == "") {
 
         }
-         total_score += val.innerText == "" ? 0 : parseInt(val.innerText);
+         total_score += val.innerText == "" ? 0 : parseFloat(val.innerText);
       });
       $(current_row).find('.total_score').html(total_score);
     }
@@ -209,7 +243,7 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
       
       let score = el.html();
       let percentage = el.data("percentage");
-      if (parseInt(percentage) < parseInt(score)) {
+      if (parseFloat(percentage) < parseFloat(score)) {
         showMessage('red', 'Alert!', 'Invalid Input! Score must below or equal to '+ percentage);
         console.log('Invalid Input! Score must below or equal to '+ percentage);
         el.html(current_score); // return to current record
@@ -217,7 +251,7 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
         event.preventDefault();
           
       }
-      // else if (parseInt(score) == "") {
+      // else if (parseFloat(score) == "") {
       //   showMessage('red', 'Alert!', 'Invalid Input! Empty or 0 score is not allowed.');
       //   console.log('Invalid Input! Empty or 0 score is not allowed.');
       //   el.html(current_score); // return to current record
@@ -237,7 +271,7 @@ $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
         let participantid = el.data("participantid");
         let score_id = el.data("scoreid"); 
         let percentage = el.data("percentage");
-        console.log('score = '+ parseInt(score));
+        console.log('score = '+ parseFloat(score));
         console.log('criteriaid = '+criteriaid);
         console.log('judgeid = '+judgeid);
         console.log('programid = '+programid);

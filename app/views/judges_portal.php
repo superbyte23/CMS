@@ -18,7 +18,7 @@
       </h1>
     </div>
     <div class="col d-none d-lg-block">
-       <h1 class="display-6 text-center mb-0">KCC WEEK</h1>
+       <!-- <h1 class="display-6 text-center mb-0">KCC WEEK</h1> -->
     </div>
     <div class="col-auto d-flex gap-2 justify-content-end"> 
         <a href="#"   rel="noopener" class="bg-transparent btn btn-icon" title="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="layout-grid"> 
@@ -44,7 +44,7 @@
               <div class="col">
                 <div class="card-body">
                   <h2 class="text-orange"><?php echo $prog->program_name ?></h2>
-                  <h4><?php echo date_format(date_create($prog->date),"F d, Y g:i A"); ?></h4>
+                  <!-- <h4><?php echo date_format(date_create($prog->date),"F d, Y g:i A"); ?></h4> -->
                   <a href="?view=program_scoresheet&program=<?php echo $prog->program_id ?>" class="btn btn-green">Enter Program</a>
                 </div>
               </div>

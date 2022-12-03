@@ -23,7 +23,10 @@ switch ($action) {
 		load_form($score, $criterias, $_POST['judge_id'], $participants, $_POST['program_id']);
 		break;
 
-	case 'get_overallscore_by_judge': 
+	case 'get_overallscore_by_judge':
+		$rank_list = array();
+		$rank_list_raw = array();
+		$final_rank = array();
 		$sql = "SELECT
 		participants.participant_id,
 		participants.participant_name,
@@ -39,14 +42,25 @@ switch ($action) {
 		$sql .= "RANK() OVER (ORDER BY (".rtrim($sqltotal, "+ ").") DESC) AS RANK FROM scores LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE judge_id = ".$_POST['judgeid']." GROUP BY scores.`judge_id`, scores.`participant_id` ORDER BY participant_id;";  
 		$db->setQuery($sql);
 		$results = $db->results_obj(); 
+		foreach ($results as $key => $result){
+			$rank_list[$result->participant_id] = $result->TOTAL;
+			$rank_list_raw[] = $result->TOTAL;  
+		}
+		$rank_average = rankify_asc($rank_list_raw, count($rank_list_raw));
+		$counter = 0;
+		foreach ($rank_list as $index => $val) { 
+			$final_rank[$index] = $rank_average[$counter]; 
+			$counter = $counter + 1;
+		}
+			 
 		?>
 		<h1 class="mb-4">Name : <?php echo $judge->judge_info($_POST['judgeid'], $_POST['program_id'])->fullname ?></h1>
 		<div class="table-responsive">
-			<table class="table table-striped table-bordered table-hover "> 
-			  <thead class="thead-dark|thead-light">
+			<table class="table table-bordered"> 
+			  <thead class="">
 			    <tr>
 			      <th scope="col">#</th>
-			      <th scope="col">Participants</th>
+			      <th class="text-start">Participants</th>
 			     	<?php foreach ($criteria->criteria_in_program_id($_POST['program_id']) as $key => $crit): ?>
 			     		<th><?php echo $crit->criteria ?></th>
 			     	<?php endforeach ?>
@@ -55,19 +69,26 @@ switch ($action) {
 			    </tr>
 			  </thead>
 			  <tbody>
-			  	<?php foreach ($results as $key => $result): ?>
+			  	<?php foreach ($results as $key => $result): ?> 
 			  		<tr>
 			      <th scope="row"><?php echo $key+1 ?></th>
-			      <td><?php echo $result->participant_name ?></td>
+			      <td class="text-start"><?php echo $result->participant_name ?></td>
 			     	<?php foreach($criteria->criteria_in_program_id($_POST['program_id']) as $key => $crit): ?>
 			     		<?php $prop = $crit->criteria; ?>
 			     		<td><?php echo $result->$prop; ?></td>
 			     	<?php endforeach ?>
 			     	<td><?php echo $result->TOTAL ?></td>
-			      <td><?php echo $result->RANK; ?></td>
+			      <?php 
+
+			      foreach ($final_rank as $key => $rank) {
+					    if ($key == $result->participant_id) {
+					     echo "<td class='bg-green-lt'>".$rank."</td>";
+					    }
+					  }
+
+			       ?>
 			    </tr> 
 			  	<?php endforeach ?>
-			    
 			  </tbody>
 			</table>
 		</div>

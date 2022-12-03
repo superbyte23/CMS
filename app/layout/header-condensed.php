@@ -8,7 +8,7 @@
     <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
       <a href="" class="d-flex align-items-center gap-2">
         <img src="<?php echo ASSETS ?>/static/kcclogo.png" width="40" height="40" alt="Tabler" class="">
-        <span class="d-none d-lg-inline-block h2 mb-0"><?php echo APPNAME ?></span>
+        <span id="appname" class="d-none d-md-inline-block h2 mb-0"><?php echo APPNAME ?></span>
       </a>
     </h1>
     <div class="navbar-nav flex-row order-md-last">
@@ -17,7 +17,7 @@
       <div class="nav-item dropdown">
         <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
           <span class="avatar avatar-sm" style="background-image: url('<?php echo URLROOT; ?>/public/static/avatar.png')"></span>
-          <div class="d-none d-xl-block ps-2">
+          <div class="d-none d-md-block ps-2">
             <div><?php echo ucwords($user->getUser($_SESSION['userid'])->fullname) ?></div>
             <div class="mt-1 small text-muted"><?php echo ucwords($user->getUser($_SESSION['userid'])->usertype) ?></div>
           </div>

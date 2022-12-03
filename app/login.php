@@ -6,15 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title><?php echo SITENAME; ?></title>
+    <link rel="icon" type="image/x-icon" href="<?php echo URLROOT; ?>/public/static/favicon.ico">
     <!-- CSS files -->
-    <link href="<?php echo URLROOT; ?>/public/dist/css/tabler.min.css" rel="stylesheet"/>
-    <link href="<?php echo URLROOT; ?>/public/dist/css/tabler-flags.min.css" rel="stylesheet"/>
-    <link href="<?php echo URLROOT; ?>/public/dist/css/tabler-payments.min.css" rel="stylesheet"/>
-    <link href="<?php echo URLROOT; ?>/public/dist/css/tabler-vendors.min.css" rel="stylesheet"/>
+    <link href="<?php echo URLROOT; ?>/public/dist/css/tabler.min.css" rel="stylesheet"/> 
     <link href="<?php echo URLROOT; ?>/public/dist/css/demo.min.css" rel="stylesheet"/> 
-
-    <!-- fontawesome -->
-    <link href="<?php echo URLROOT; ?>/public/dist/libs/fontawesome/css/all.css" rel="stylesheet"/>
+ 
     <!-- jquery --> 
     <script src="<?php echo URLROOT; ?>/public/dist/libs/jquery/js/jquery-3.6.1.min.js"></script>
     <!-- confirm js -->
@@ -22,15 +18,21 @@
     <script src="<?php echo URLROOT; ?>/public/dist/libs/confirm/js/jquery-confirm.min.js"></script>
 
     <style type="text/css">
-    .input-password{
-    -webkit-text-security: disc;
+    .input-password{ 
+      -webkit-text-security: disc;
+    }
+    .bg-login{
+      background-image: url('<?php echo ASSETS ?>/static/img/bg.png'); 
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center;
     }
     </style>
     </style>
   </head>
 </head>
-<body  class=" border-top-wide border-primary d-flex flex-column">
-  <div class="page page-center">
+<body class="overflow-hidden d-flex flex-column ">
+  <div class="page page-center bg-login">
     <div class="container-tight py-4">
       <form class="card card-md" action="<?php echo URLROOT.'/app/controller/usercontroller.php?action=login'; ?>" method="post" autocomplete="off">
         <div class="card-body">

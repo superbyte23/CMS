@@ -40,7 +40,7 @@
             </div>
             <div class="card-title mb-1"><?php echo $event->event_name ?></div>
 
-            <div class="text-muted">Date : <?php echo $event->event_date_start ?></div>
+            <!-- <div class="text-muted">Date : <?php echo $event->event_date_start ?></div> -->
           </div>
           <a href="<?php echo URLROOT ?>/app/views/programs/?view=event_programs&event_id=<?php echo $event->event_id ?>" class="card-btn">View Details</a>
         </div>

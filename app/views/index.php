@@ -16,8 +16,7 @@ if (!isset($_SESSION['userid'])){
 	 
 	if ($user->getUser($_SESSION['userid'])->usertype == 'judge') {
 		switch ($view) {
-			case 'judge':
-				
+			case 'judge': 
 				break; 
 			case 'program_scoresheet':
 				// show judges score sheets for selected program
@@ -48,7 +47,18 @@ if (!isset($_SESSION['userid'])){
 				$judges_in_program = $judge->judges_by_program($_GET['program']);
 				$pagetitle = "Tabulators Portal";
 	    	$content = "tally_sheet.php";
-				break; 
+				break;
+			case 'print':
+				// show program information
+				$program_info = $prog->program_by_id($_GET['program']);
+				// show criteria in programs
+				$criterias = $crit->criteria_in_program_id($_GET['program']);
+				// show all judges in a program
+				$judges_in_program = $judge->judges_by_program($_GET['program']);
+				$pagetitle = "Tabulators Portal";
+	    	$content = "print.php";
+				break;
+			
 			default: 
 
 				$pagetitle = "Tabulators Portal";

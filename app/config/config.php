@@ -9,10 +9,10 @@
   define('SITENAME', 'E-Judging System');
 
   // Site Name.
-  define('APPNAME', 'CMS');
+  define('APPNAME', 'KCC Judging System');
 
   // version
-  define('VERSION', 'Version 1.0.0');
+  define('VERSION', 'Version 1.0.0'); 
 
   // Mysql DB
   define("DB_HOST", "localhost");

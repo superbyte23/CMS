@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <title><?php echo SITENAME; ?></title>
+    <link rel="icon" type="image/x-icon" href="<?php echo URLROOT; ?>/public/static/favicon.ico">
     <!-- CSS files -->
     <link href="<?php echo URLROOT; ?>/public/dist/css/tabler.min.css" rel="stylesheet"/>
     <link href="<?php echo URLROOT; ?>/public/dist/css/tabler-flags.min.css" rel="stylesheet"/>

@@ -4,13 +4,15 @@ $user = new User($db);
 $criteria = new Criteria($db);
 $action = (isset($_GET['action']) && $_GET['action'] != '') ? $_GET['action'] : '';
 switch ($action) {
-	case 'add': 	
+	case 'add':  
 		$criteria->program_id = $_POST['program_id']; 
 		$criteria->criteria = $_POST['criteria']; 
 		$criteria->description = $_POST['description']; 
-		$criteria->percentage = $_POST['percentage']; 
-		$criteria->save(); 
-
+		$criteria->percentage = $_POST['percentage'];
+		if (isset($_POST['status'])) {
+		 	$criteria->status = 1;
+	 	} 
+		$criteria->save();
 		header('location: '.URLROOT.'/app/views/programs/?view=program_info&program_id='.$_POST['program_id']);
 		break;
 
@@ -19,11 +21,19 @@ switch ($action) {
 		echo json_encode($result); 
 		break;
 
-	case 'update':   
+	case 'update':  
+
 		$criteria->criteria = $_POST['criteria'];
 		$criteria->description = $_POST['description'];
 		$criteria->percentage = $_POST['percentage'];
 		$criteria->update($_POST['criteria_id']);
+		if (isset($_POST['status'])) {
+		 	$criteria->status = 1;
+	 	}else{
+	 		$criteria->status = 0;
+	 	}
+
+	 	$criteria->update($_POST['criteria_id']);
 		print_r($_POST);
 		  
 		header('location: '.URLROOT.'/app/views/programs/?view=program_info&program_id='.$_POST['program_id']);
