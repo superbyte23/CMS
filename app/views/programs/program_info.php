@@ -39,18 +39,23 @@
                       <span class="form-selectgroup-label">JavaScript</span>
                     </label> -->
                     <label class="form-selectgroup-item">
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#modal-criteria" class="btn btn-outline-azure shadow  w-100">
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#modal-criteria" class="btn btn-outline-azure shadow border-0  w-100">
                         Set Criteria
                       </a>
                     </label>
                     <label class="form-selectgroup-item">
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#modal-judges" class="btn btn-outline-lime  shadow w-100">
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#modal-judges" class="btn btn-outline-lime shadow border-0 w-100">
                         Add Judges
                       </a>
                     </label>
                     <label class="form-selectgroup-item">
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#modal-full-width" class="btn btn-outline-pink  shadow w-100">
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#modal-full-width" class="btn btn-outline-pink shadow border-0 w-100">
                         Add Participants
+                      </a>
+                    </label>
+                    <label class="form-selectgroup-item">
+                      <a href="#" data-bs-toggle="modal" id="viewscoresheet" data-bs-target="#view-scoresheet" class="btn btn-outline-primary shadow border-0 w-100">
+                        View Scoresheet
                       </a>
                     </label> 
                   </div>
@@ -96,7 +101,7 @@
                   </tr>
                   <?php endforeach ?>
                   <tr>
-                    <td colspan="4" class="text-end h3">Total Percentage : <span class="text-danger"><?php echo $total_percent ?>%</span></td>
+                    <td colspan="7" class="text-end h3">Total Percentage : <span class="text-danger"><?php echo $total_percent ?>%</span></td>
                   </tr>
                 </tbody>
               </table>
@@ -125,7 +130,7 @@
                 </div>
                 <?php endforeach ?>
               </div>
-              <button class="btn btn-danger"><i class="fa fa-trash me-2"></i>Delete</button> 
+              <button class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="4" y1="7" x2="20" y2="7"></line><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path></svg></i>Delete</button> 
               </form>
             </div>
           </div> 
@@ -173,12 +178,21 @@
           </div>
         </div>
       </div>
-    <!-- <form action="<?php echo URLROOT ?>/app/controller/program_controller.php?action=generate_scoresheet" method="POST">
-      <input type="hidden" name="program_id" value="<?php echo $_GET['program_id']; ?>">
-      <button type="submit"  <?php echo ($total_percent < 100) ? "disabled" : "";  ?> class="btn btn-outline-dark shadow w-100">
-        Generate Scoresheets
-      </button> 
-    </form> -->
+      <div class="d-flex gap-2">
+        <form action="<?php echo URLROOT ?>/app/controller/program_controller.php?action=generate_scoresheet" method="POST">
+          <input type="hidden" name="program_id" value="<?php echo $_GET['program_id']; ?>">
+          <button type="submit"  <?php echo ($total_percent < 100) ? "disabled" : "";  ?> class="btn btn-outline-success border-0 shadow">
+            Generate Scoresheets
+          </button> 
+        </form>
+        <form action="<?php echo URLROOT ?>/app/controller/program_controller.php?action=reset_scoresheet" method="POST">
+          <input type="hidden" name="program_id" value="<?php echo $_GET['program_id']; ?>">
+          <button type="submit"  <?php echo ($total_percent < 100) ? "disabled" : "";  ?> class="btn btn-outline-warning border-0 shadow">
+            Reset Scoresheets
+          </button> 
+        </form>
+      </div>
+    
     </div>
   </div>
 </div>
@@ -367,7 +381,40 @@
     </div>
   </div>
 </div>
-
+<!-- view overall scoresheet -->
+<div class="modal fade" id="view-scoresheet" data-bs-backdrop="static" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-full-width" role="document">
+    <div class="modal-content"> 
+        <div class="modal-header">
+          <h5 class="modal-title">Scoresheet</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body" id="scoresheet">
+           
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button> 
+        </div>         
+    </div>
+  </div>
+</div>
+<!-- view individual score -->
+<div class="modal fade" id="show-score-judge" data-bs-backdrop="static">
+  <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="judge_name">Judge's Individual Scores</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="judge_score_content"> 
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn me-auto btn-danger" data-bs-dismiss="modal">Close</button> -->
+        <button type="button" class="btn btn-primary shadow" data-bs-toggle="modal" id="viewscoresheet" data-bs-target="#view-scoresheet">Close</button>
+      </div>
+    </div>
+  </div>
+</div>  
 <script>
   $(document).ready(function() {
     $('.participant_edit').on('click', function(){
@@ -425,8 +472,30 @@
       .always(function(rp) {
         console.log(rp);
         console.log("complete");
-      });
-      
+      }); 
     });
+    //
+    // 
+    $('#viewscoresheet').on('click', function(){
+      let id = <?php echo $_GET['program_id'] ?>;
+      console.log(id);
+      $.ajax({
+        url: '<?php echo URLROOT ?>/app/controller/program_controller.php?action=viewscoresheet',
+        type: 'POST',
+        dataType: 'html',
+        data: {id: id},
+      })
+      .done(function(rp) {  
+        console.log("success");
+        $('#scoresheet').html(rp);
+      })
+      .fail(function(rp) { 
+        console.log("error");
+      })
+      .always(function(rp) { 
+        console.log("complete");
+      }); 
+    });
+    // 
   });
 </script>

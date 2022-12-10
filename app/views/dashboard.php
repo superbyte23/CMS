@@ -32,7 +32,6 @@
           </h1> 
           <h1 class="fst-italic d-lg-none">Kabankalan Catholic College</h1>
           <h2 class="fst-italic d-lg-none">Contest Management System</h2>
-
           <p class="markdown my-3">E-Judging and Event Management</p>  
         </div>
       </div> 

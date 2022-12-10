@@ -18,7 +18,7 @@
       </h1>
     </div>
     <div class="col d-none d-lg-block">
-       <h1 class="display-6 text-center mb-0">KCC WEEK</h1>
+       <h1 class="display-6 text-center mb-0">KCC WEEK 2022</h1>
     </div>
     <div class="col-auto d-flex gap-2 justify-content-end"> 
         <a href="#"   rel="noopener" class="bg-transparent btn btn-icon" title="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="layout-grid"> 

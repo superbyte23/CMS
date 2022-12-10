@@ -84,6 +84,15 @@
 	src: url("./fonts/poppins/Poppins-Regular.ttf"); 
 }
 
+@font-face {
+    font-family: 'kimberly_signatureregular';
+    src: url('./fonts/kimberly-signature/kimberlysignature-l3zxw.woff2') format('woff2'),
+         url('./fonts/kimberly-signature/kimberlysignature-l3zxw.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 /*@font-face {
     font-family: 'Metropolis';
     src: url('./fonts/metropolis/Metropolis-Black.woff2') format('woff2'),

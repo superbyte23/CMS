@@ -8,14 +8,22 @@
     </div>
   <div class="card-status-top bg-green"></div>
   <div class="d-flex align-items-center justify-content-between">
-    <div class="col-auto">
+    <div class="col-auto d-flex gap-3 align-items-center">
+      <div>
+        <a href="../" rel="noopener" class="demo-icons-list-item btn" title="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back"> 
+          <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="15 6 9 12 15 18"></polyline></svg>
+        </a>
+      </div>
       <!-- Page pre-title -->
+      <div class="">
+        
       <div class="page-pretitle">
         Overview
       </div>
       <h1 class="mb-0">
       <?php echo $pagetitle ?>
       </h1>
+      </div>
     </div>
     <div class="col d-none d-lg-block">
        <!-- <h1 class="display-6 text-center mb-0">KCC WEEK</h1> -->

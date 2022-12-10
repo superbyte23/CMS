@@ -32,39 +32,75 @@
   </head>
 </head>
 <body class="overflow-hidden d-flex flex-column ">
-  <div class="page page-center bg-login">
-    <div class="container-tight py-4">
-      <form class="card card-md" action="<?php echo URLROOT.'/app/controller/usercontroller.php?action=login'; ?>" method="post" autocomplete="off">
-        <div class="card-body">
-          <div class="text-center">
-            <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?php echo URLROOT; ?>/public/static/kcclogo.png" height="150" alt=""></a>
-          </div>
-          <h1 class="text-center">E-JUDGING SYSTEM</h1>
-          <h2 class="card-title text-center mb-4">Login your account</h2>
-          <div class="mb-3">
-            <label class="form-label">Username</label>
-            <input type="text" class="form-control" placeholder="Enter username" name="username" autocomplete="off">
-          </div>
-          <div class="mb-2">
-            <label class="form-label">
-              Password
-            </label>
-            <div class="input-group input-group-flat">
-              <input type="text" class="form-control input-password"  placeholder="Password"  autocomplete="off" name="password" autocomplete="off">
-            </div>
-          </div>
-          <div class="form-footer">
-            <button type="submit" class="btn btn-primary w-100">Login</button>
-          </div>
+  <!-- design one -->
+  <!-- 
+  <div class="row g-0 flex-fill">
+      <div class="col-12 col-lg-6 col-xl-4 border-top-wide border-primary d-flex flex-column justify-content-center">
+        <div class="container container-tight my-5 px-lg-5">   
+          <form class="" action="<?php echo URLROOT.'/app/controller/usercontroller.php?action=login'; ?>" method="post" autocomplete="off"> 
+              <div class="text-center">
+                <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?php echo URLROOT; ?>/public/static/95th.png" height="250" alt=""></a>
+              </div>
+              <h1 class="text-center">E-JUDGING SYSTEM</h1>
+              <h2 class="card-title text-center mb-4">Login your account</h2>
+              <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" placeholder="Enter username" name="username" autocomplete="off">
+              </div>
+              <div class="mb-2">
+                <label class="form-label">
+                  Password
+                </label>
+                <div class="input-group input-group-flat">
+                  <input type="text" class="form-control input-password"  placeholder="Password"  autocomplete="off" name="password" autocomplete="off">
+                </div>
+              </div>
+              <div class="form-footer">
+                <button type="submit" class="btn btn-red btn-lg w-100">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path><path d="M20 12h-13l3 -3m0 6l-3 -3"></path></svg>Login</button>
+              </div>  
+          </form> 
         </div>
-        
-      </form>
-      <div class="text-center text-muted mt-3">
-        <!-- Already have account? <a href="./register.php" tabindex="-1">Sign up</a> -->
+      </div>
+      <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
+        <div class="bg-cover h-100 min-vh-100 bg-login" ></div>
+      </div>
+    </div> -->
+
+    <!-- design two -->
+
+
+    <div class="page page-center bg-login">
+      <div class="container-tight py-4">
+        <form class="card card-md" style="background: rgb(255 255 255 / 90%);" action="<?php echo URLROOT.'/app/controller/usercontroller.php?action=login'; ?>" method="post" autocomplete="off">
+          <div class="card-body">
+            <div class="d-flex gap-3 mb-4">
+              <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?php echo URLROOT; ?>/public/static/kcclogo.png" class="img-fluid" width="200" alt=""></a>
+              <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?php echo URLROOT; ?>/public/static/95th.png" class="img-fluid" width="250" alt=""></a>
+            </div>
+            <h1 class="text-center">E-JUDGING SYSTEM</h1>
+            <h2 class="card-title text-center mb-4">Login your account</h2>
+            <div class="mb-3">
+              <label class="form-label">Username</label>
+              <input type="text" class="form-control" placeholder="Enter username" name="username" autocomplete="off">
+            </div>
+            <div class="mb-2">
+              <label class="form-label">
+                Password
+              </label>
+              <div class="input-group input-group-flat">
+                <input type="text" class="form-control input-password"  placeholder="Password"  autocomplete="off" name="password" autocomplete="off">
+              </div>
+            </div>
+            <div class="form-footer">
+              <button type="submit" class="btn btn-red btn-lg w-100">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M14 8v-2a2 2 0 0 0 -2 -2h-7a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7a2 2 0 0 0 2 -2v-2"></path><path d="M20 12h-13l3 -3m0 6l-3 -3"></path></svg>Login</button>
+            </div>
+          </div> 
+        </form>
       </div>
     </div>
-  </div>
-  <div class="toast-container position-fixed top-20 start-50 translate-middle-x p-3">
+  <div class="toast-container position-fixed top-20 start-50 p-3">
     <div id="liveToast" class="toast bg-danger " role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
         <strong class="me-auto">Alert</strong> 

@@ -75,17 +75,19 @@ switch ($action) {
 			      <td class="text-start"><?php echo $result->participant_name ?></td>
 			     	<?php foreach($criteria->criteria_in_program_id($_POST['program_id']) as $key => $crit): ?>
 			     		<?php $prop = $crit->criteria; ?>
-			     		<td><?php echo $result->$prop; ?></td>
+			     		<td><?php echo $result->$prop == 0 ? '' : $result->$prop; ?></td>
 			     	<?php endforeach ?>
-			     	<td><?php echo $result->TOTAL ?></td>
+			     	<td><?php echo $result->TOTAL == 0 ? '' : $result->TOTAL; ?></td>
 			      <?php 
-
-			      foreach ($final_rank as $key => $rank) {
-					    if ($key == $result->participant_id) {
-					     echo "<td class='bg-green-lt'>".$rank."</td>";
-					    }
-					  }
-
+			      if(count(array_unique($final_rank)) === 1) {
+		            echo '<td class="bg-green-lt"></td>';
+		        }else{
+		          foreach ($final_rank as $key => $rank) {
+						    if ($key == $result->participant_id) {
+						     echo "<td class='bg-green-lt'>".$rank."</td>";
+						    }
+						  }
+		        } 
 			       ?>
 			    </tr> 
 			  	<?php endforeach ?>

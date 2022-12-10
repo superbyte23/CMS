@@ -33,8 +33,7 @@ switch ($action) {
 
 		$judgeObj = new Judge($db);
 		$partcpntObj = new Participant($db);
-		$critObj = new Criteria($db);
-
+		$critObj = new Criteria($db); 
 		$judgeList = $judgeObj->judges_by_program($_POST['program_id']);
 	 	$partcpntList = $partcpntObj->participants_in_program_id($_POST['program_id']);
 		$critList = $critObj->criteria_in_program_id($_POST['program_id']);
@@ -46,11 +45,23 @@ switch ($action) {
 					$sql .= $counter++." INSERT INTO `scores`(`program_id`, `judge_id`, `criteria_id`, `participant_id`, `score`) VALUES (".$_POST['program_id'].", ".$jd->judge_id.", ".$crit->criteria_id.", ".$part->participant_id.", '');<br>";
 				}
 			} 
-		}
-		 
+		}		 
 	 	echo $sql;
 	 	die();
 		echo $db->InsertThis($sql);
+		header('location: '.URLROOT.'/app/views/programs/?view=program_info&program_id='.$_POST['program_id']);
+		break;
+
+		case 'viewscoresheet': 
+
+		require_once 'demo.php';
+		
+		break;
+
+		case 'reset_scoresheet': 
+
+		$sql = "UPDATE scores SET score = '' WHERE program_id = ".$_POST['program_id'];
+		$db->setQuery($sql);
 		header('location: '.URLROOT.'/app/views/programs/?view=program_info&program_id='.$_POST['program_id']);
 		break;
 
@@ -68,6 +79,6 @@ switch ($action) {
 	default:
 		// code...
 		break;
-}   
+}
 
 ?>

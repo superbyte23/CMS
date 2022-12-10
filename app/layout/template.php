@@ -16,6 +16,9 @@
         font-family: "Poppins-Regular"!important;
         font-size: 1rem;
       }
+      .program-title{
+        font-family: "Metropolis-Semi"!important;
+      }
       #appname {
         font-family: "Metropolis-Bold"!important;
       }
@@ -33,6 +36,10 @@
         font-size: 1.2rem;
         vertical-align: middle;
         text-align: center;
+      }
+      .text-shadow{
+        text-shadow: 4px 3px 0px #fff, 9px 8px 0px rgba(0,0,0,0.15);
+
       }
     </style> 
     <!-- fontawesome -->

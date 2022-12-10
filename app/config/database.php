@@ -28,7 +28,6 @@ class DB
 		try { 
 			$this->query = $this->conn->prepare($sql);
 			$this->query->execute();
-
 		  } catch (PDOException $e) {
 		    echo "Failed to get query handle: " . $e->getMessage() . "\n";
 		    exit;

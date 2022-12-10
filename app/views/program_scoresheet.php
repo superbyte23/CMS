@@ -8,51 +8,59 @@ $criterias = $crit->criteria_in_program_id($_GET['program']);
 $judge_info = $judge->judge_info($_SESSION['userid'], $_GET['program']);
 
 // load_form($score, $criterias, $_POST['judge_id'], $participants, $_POST['program_id']);
-
+$table_counter = 1;
 // for ranking only
 $rank_list = array();
 $rank_list_raw = array();
 $final_rank = array();
 foreach ($participants as $key => $part){
   $rank_list[$part->participant_id] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
-  $rank_list_raw[] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score; 
+  $rank_list_raw[] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
 
   $sql = "SELECT participants.participant_id, participants.participant_name, judges.judge_id, users.fullname, SUM(`score`) AS OVERALL_SCORE_BY_JUDGE, RANK() OVER(PARTITION BY judges.judge_id ORDER BY SUM(`score`) DESC ) AS RANK_BY_JUDGES FROM `scores` LEFT JOIN judges ON scores.judge_id = judges.judge_id LEFT JOIN users ON judges.user_id = users.id LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE scores.program_id = ".$_GET['program']." AND judges.judge_id = ".$judge_info->judge_id." GROUP BY scores.`participant_id`, scores.`judge_id` ORDER BY judges.judge_id, scores.participant_id;";
 
   $db->setQuery($sql);
   $ranks = $db->results_obj();  
-}  
+}
   
-?> 
+?>
 <?php $rank_average = rankify_asc($rank_list_raw, count($rank_list_raw));  ?> 
 <?php 
 $counter = 0;
 foreach ($rank_list as $index => $val) { 
   $final_rank[$index] = $rank_average[$counter]; 
   $counter = $counter + 1;
-}
+} 
 ?>  
 <div class="container-fluid">
   <!-- Page title -->
-  <div class=" card card-body page-header d-print-none card">
+  <div class=" card card-body page-header d-print-none card shadow">
     <div class="card-stamp card-stamp-lg">
       <div class="card-stamp-icon bg-green">
       <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line><line x1="7" y1="4" x2="17" y2="4"></line><path d="M17 4v8a5 5 0 0 1 -10 0v-8"></path><circle cx="5" cy="9" r="2"></circle><circle cx="19" cy="9" r="2"></circle></svg>
       </div>
     </div>
   <div class="card-status-top bg-green"></div>
-  <div class="d-flex align-items-center justify-content-between">
-    <div class="col-auto  d-none d-lg-block">
+  <div class="d-lg-flex align-items-center justify-content-between">
+    <div class="col-auto d-flex gap-3 align-items-center">
+      <div>
+        <a href="../" rel="noopener" class="demo-icons-list-item btn" title="" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-original-title="Back"> 
+          <svg xmlns="http://www.w3.org/2000/svg" class="" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><polyline points="15 6 9 12 15 18"></polyline></svg>
+        </a>
+      </div>
       <!-- Page pre-title -->
+      <div class="">
+        
       <div class="page-pretitle">
         Overview
       </div>
       <h1 class="mb-0">
       <?php echo $pagetitle ?>
       </h1>
+      </div>
     </div>
     <div class="col">
-      <h1 class="display-6 text-center mb-0">
+      <h1 class="display-6 text-center mb-0 program-title">
       <?php echo $program_info->program_name ?>
       </h1>
     </div>
@@ -71,10 +79,17 @@ foreach ($rank_list as $index => $val) {
   .active{
     background-color: #00ff7912!important;
   }
+  .disable-select {
+    user-select: none; /* supported by Chrome and Opera */
+   -webkit-user-select: none; /* Safari */
+   -khtml-user-select: none; /* Konqueror HTML */
+   -moz-user-select: none; /* Firefox */
+   -ms-user-select: none; /* Internet Explorer/Edge */
+}
 </style>
 <div class="page-body">
   <div class="container-fluid">  
-    <div class="card">
+    <div class="card shadow">
       <div class="card-header">
         <h1 class="mb-0">Score Sheet : <?php echo $judge_info->fullname ?></h1>
         <a href="" class="ms-auto btn btn-lg bg-lime"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-refresh" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -83,14 +98,25 @@ foreach ($rank_list as $index => $val) {
    <path d="M4 13a8.1 8.1 0 0 0 15.5 2m.5 4v-4h-4"></path>
 </svg> Update Ranking</a> 
       </div>
+
+      <div class="card-body">
       <div class="table-responsive">
-        <table class="table table-bordered border-dark table-hover  table-lg" id="scoresheet"> 
+        <table class="table table-bordered border-dark table-lg disable-select" id="scoresheet"> 
           <thead class="table-dark">
             <tr>
               <th>#</th>
               <th  class="text-start col-4">Candidates</th>
               <?php $total_percent=0; $total_score=0; ?>
               <?php foreach ($criterias as $key => $criteria): ?>
+                <?php if ($criteria->status == 1): ?>
+              <?php $total_percent += $criteria->percentage; // SUM total percentage ?> 
+              <th class="d-none">
+                <div class="d-flex align-items-center justify-content-center"><?php if ($criteria->status == 1): ?>
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon text-danger" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><rect x="5" y="11" width="14" height="10" rx="2"></rect><circle cx="12" cy="16" r="1"></circle><path d="M8 11v-4a4 4 0 0 1 8 0v4"></path></svg> 
+                <?php endif ?><?= $criteria->criteria ?> : <?= $criteria->percentage ?>%</div>
+                <small class="text-red"><?= $criteria->description ?></small>
+              </th>
+            <?php else: ?>
               <?php $total_percent += $criteria->percentage; // SUM total percentage ?> 
               <th>
                 <div class="d-flex align-items-center justify-content-center"><?php if ($criteria->status == 1): ?>
@@ -99,6 +125,7 @@ foreach ($rank_list as $index => $val) {
                 <small class="text-red"><?= $criteria->description ?></small>
                 
               </th>
+            <?php endif ?>
               <?php endforeach ?>
               <th class="col-1"><?php echo $total_percent ?>%</th>
               <th class="col-1">RANK</th>
@@ -107,48 +134,68 @@ foreach ($rank_list as $index => $val) {
           <tbody> 
 <?php foreach ($participants as $key => $part): ?>
 <tr>
-  <td><?= $part->participant_id ?></td>
+  <td><?= $table_counter++ ?></td>
   <td class="text-start"><?= $part->participant_name ?></td>
   <?php foreach ($criterias as $key => $crit): // display inputs for each criteria ?>
-  <td
-  <?php if ($crit->status == 1): ?>
-  contenteditable="false"
-  <?php else: ?>
-  contenteditable="true" 
-  <?php endif ?>
-  class="input-field"  
-  data-percentage="<?php echo $crit->percentage ?>"
-  data-criteriaid="<?php echo $crit->criteria_id ?>" 
-  data-judgeid="<?php echo $judge_info->judge_id ?>"
-  data-programid="<?php echo $program_info->program_id ?>"
-  data-participantid="<?php echo $part->participant_id ?>"
-  <?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score)) ? 
-  "data-scoreid='".$score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score_id."'" : ""; ?>><?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score) > 0) ? $score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score : "" ?></td> 
+  
+    <?php if ($crit->status == 1): ?>
+      <td
+    contenteditable="false" 
+    data-percentage="<?php echo $crit->percentage ?>"
+    data-criteriaid="<?php echo $crit->criteria_id ?>" 
+    data-judgeid="<?php echo $judge_info->judge_id ?>"
+    data-programid="<?php echo $program_info->program_id ?>"
+    data-participantid="<?php echo $part->participant_id ?>"  
+    class="input-field d-none"
+    <?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score)) ? 
+    "data-scoreid='".$score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score_id."'" : ""; ?>><?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score) > 0) ? $score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score : "" ?></td> 
+    <?php else: ?>
+      <td
+    contenteditable="true" 
+    data-percentage="<?php echo $crit->percentage ?>"
+    data-criteriaid="<?php echo $crit->criteria_id ?>" 
+    data-judgeid="<?php echo $judge_info->judge_id ?>"
+    data-programid="<?php echo $program_info->program_id ?>"
+    data-participantid="<?php echo $part->participant_id ?>"  
+    class="input-field"
+    <?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score)) ? 
+    "data-scoreid='".$score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score_id."'" : ""; ?>><?php echo (isset($score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score) > 0) ? $score->score_by_criteria_participant_judge($crit->criteria_id, $part->participant_id, $judge_info->judge_id)->score : "" ?></td> 
+    <?php endif ?>
   <?php endforeach ?>
   <td class="bg-indigo-lt total_score">
     <?php
     $rank_list[$part->participant_id] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
     $rank_list_raw[] = $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
-    echo $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
+    if ($score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score == 0) {
+      // code...
+    }else{
+      echo $score->total_score_by_participant_each_judge($part->participant_id, $judge_info->judge_id)->total_score;
+    }
     ?>
   </td>
   <?php
-  $sql = "SELECT participants.participant_id, participants.participant_name, judges.judge_id, users.fullname, SUM(`score`) AS OVERALL_SCORE_BY_JUDGE, RANK() OVER(PARTITION BY judges.judge_id ORDER BY SUM(`score`) DESC ) AS RANK_BY_JUDGES FROM `scores` LEFT JOIN judges ON scores.judge_id = judges.judge_id LEFT JOIN users ON judges.user_id = users.id LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE scores.program_id = ".$_GET['program']." AND judges.judge_id = ".$judge_info->judge_id." GROUP BY scores.`participant_id`, scores.`judge_id` ORDER BY judges.judge_id, scores.participant_id;";
-  //echo $sql;
-  $db->setQuery($sql);
-  $ranks = $db->results_obj();
-  foreach ($final_rank as $key => $rank) {
-    if ($key == $part->participant_id) {
-     echo "<td class='bg-green-lt'>".$rank."</td>";
-    }
+  // $sql = "SELECT participants.participant_id, participants.participant_name, judges.judge_id, users.fullname, SUM(`score`) AS OVERALL_SCORE_BY_JUDGE, RANK() OVER(PARTITION BY judges.judge_id ORDER BY SUM(`score`) DESC ) AS RANK_BY_JUDGES FROM `scores` LEFT JOIN judges ON scores.judge_id = judges.judge_id LEFT JOIN users ON judges.user_id = users.id LEFT JOIN participants ON scores.participant_id = participants.participant_id WHERE scores.program_id = ".$_GET['program']." AND judges.judge_id = ".$judge_info->judge_id." GROUP BY scores.`participant_id`, scores.`judge_id` ORDER BY judges.judge_id, scores.participant_id;";
+  // //echo $sql;
+  // $db->setQuery($sql);
+  // $ranks = $db->results_obj();
+  if(count(array_unique($final_rank)) === 1) {
+      echo '<td class="bg-green-lt">0</td>';
+  }else{
+    foreach ($final_rank as $key => $rank) {
+      if ($key == $part->participant_id) {
+       echo "<td class='bg-green-lt'>".$rank."</td>";
+      }
+    } 
   }
+  
   ?>
 </tr>
 <?php endforeach ?> 
              
           </tbody>
-        </table>
-      </div> 
+        </table> 
+      </div>  
+      </div>
     </div> 
   </div>
 </div>
@@ -173,8 +220,12 @@ foreach ($rank_list as $index => $val) {
           let index = $(this).index();
           $(this).closest('tr').next().find('td').eq(index).focus();
         }
-
-      }else{
+      }else if (code === 32) {
+        // disbale space
+        e.preventDefault();
+      }
+      else // disable keys
+      {
         if (isNaN(String.fromCharCode(e.which))) e.preventDefault();
       }
       if(code === 13) {
@@ -210,10 +261,11 @@ foreach ($rank_list as $index => $val) {
     $('.input-field').focusout(function(event) {
 
       let x = $(this).html();
+      let y = x.replace(/\s/g, '');
       if (x == 0) {
         $(this).html("");
       }
-      if (current_score != x) {
+      if (current_score != y) {
         if (parseFloat(current_score) != parseFloat(x)) {
           if (validate_score($(this)) == true) {
             console.log('score validated');
